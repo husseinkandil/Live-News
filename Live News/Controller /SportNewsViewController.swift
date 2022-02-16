@@ -7,33 +7,33 @@
 
 import UIKit
 
-class ViewController: UIViewController, NewsManagerDelegate {
+class SportNewsViewController: UIViewController, NewsManagerDelegate {
     
     private let manager = NewsManager()
     private var news = [NewsData]()
     
     private lazy var tableView: UITableView = {
-       let tbl = UITableView()
+        let tbl = UITableView()
         tbl.translatesAutoresizingMaskIntoConstraints = false
         tbl.rowHeight = UITableView.automaticDimension
         tbl.estimatedRowHeight = 600
         tbl.register(NewsCell.self, forCellReuseIdentifier: NewsCell.identifier)
         return tbl
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Live News"
+        title = "Sport News"
         navigationItem.largeTitleDisplayMode = .always
         navigationController?.navigationBar.prefersLargeTitles = true
         setUpView()
         manager.delegate = self
-        manager.fetchNews()
+        manager.fetchSportNews()
         tableView.delegate = self
         tableView.dataSource = self
     }
     
-// MARK: - setting up view
+    // MARK: - setting up view
     
     private func setUpView() {
         defer {
@@ -53,7 +53,7 @@ class ViewController: UIViewController, NewsManagerDelegate {
 }
 
 // MARK: - table view delegate and data source
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
+extension SportNewsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return news.count
@@ -69,9 +69,10 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         let data = news[indexPath.row]
         let newViewController = DetailViewController(news: data)
+        newViewController.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(newViewController, animated: true)
     }
-// MARK: - managerDelegate
+    // MARK: - managerDelegate
     func didUpdateNews(_ newsManager: NewsManager, news: [NewsData]) {
         self.news = news
         self.tableView.reloadData()
@@ -81,4 +82,5 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         print(error)
     }
 }
+
 

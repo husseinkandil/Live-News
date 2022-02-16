@@ -13,13 +13,17 @@ protocol NewsManagerDelegate: AnyObject {
 }
 
 class NewsManager {
-    let newsURL = "http://api.mediastack.com/v1/news?access_key=e31ed1aa05cab3ff03c1895d6779dafd&languages=en,-ar"
+    let newsURL = String.liveNewsUrl
+    let sportUrl = String.sportsUrl
     
     weak var delegate: NewsManagerDelegate?
     
     func fetchNews() {
         performRequest(with: newsURL)
-
+    }
+    
+    func fetchSportNews() {
+        performRequest(with: sportUrl)
     }
     
     func performRequest(with URLString: String) {
@@ -46,11 +50,11 @@ class NewsManager {
         let decoder = JSONDecoder()
         do {
             let decodedData = try decoder.decode(NewsResponse.self, from: newsData)
-//            let name = decodedData.author
-//            let image = decodedData.image
-//            let description = decodedData.description
-//            let title = decodedData.title
-//            return NewsModel(authorName: name, newsTitle: title, newsDescription: description, newsImage: image)
+            //            let name = decodedData.author
+            //            let image = decodedData.image
+            //            let description = decodedData.description
+            //            let title = decodedData.title
+            //            return NewsModel(authorName: name, newsTitle: title, newsDescription: description, newsImage: image)
             return decodedData
         } catch {
             delegate?.didFailWithError(error: error)

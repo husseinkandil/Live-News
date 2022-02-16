@@ -10,6 +10,19 @@ import Kingfisher
 
 class NewsCell: UITableViewCell {
     
+//    private let containerView: UIView = {
+//       let view = UIView()
+//        view.translatesAutoresizingMaskIntoConstraints = false
+//        view.layer.cornerRadius = 5
+//        view.layer.borderColor = UIColor.gray.cgColor
+//        view.layer.borderWidth = 2
+//        view.layer.shadowOffset = .init(width: 0, height: 3)
+//        view.layer.shadowColor = UIColor.gray.cgColor
+//        view.layer.shadowOpacity = 0.2
+//        view.layer.shadowRadius = 2
+//        return view
+//    }()
+    
     private let stackView : UIStackView = {
        let stackView = UIStackView()
         stackView.axis = .vertical
@@ -55,6 +68,7 @@ class NewsCell: UITableViewCell {
     }
     
     func activateConstraints() {
+//        contentView.addSubview(containerView)
         contentView.addSubview(stackView)
         stackView.addArrangedSubview(image)
         stackView.setCustomSpacing(10, after: image)
@@ -64,10 +78,15 @@ class NewsCell: UITableViewCell {
         
         
         NSLayoutConstraint.activate([
+//            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+//            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+//            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
+//            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
+            
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            stackView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.safeAreaLayoutGuide.bottomAnchor),
-            stackView.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor),
+            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor),
             
             image.heightAnchor.constraint(equalToConstant: 230),
         ])

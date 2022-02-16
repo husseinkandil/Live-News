@@ -10,7 +10,6 @@ import UIKit
 class DetailViewController: UIViewController {
     
     private let news: NewsData
-   // private let manager = NewsManager()
     
     init(news: NewsData) {
         self.news = news
@@ -22,7 +21,7 @@ class DetailViewController: UIViewController {
     }
     
     private let stackView : UIStackView = {
-       let stackView = UIStackView()
+        let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 20
         stackView.alignment = .fill
@@ -31,7 +30,7 @@ class DetailViewController: UIViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
-  
+    
     private let titleLabel: UILabel = {
         let title = UILabel()
         title.translatesAutoresizingMaskIntoConstraints = false
@@ -50,23 +49,21 @@ class DetailViewController: UIViewController {
     }()
     
     private let mainImageView: UIImageView = {
-       let img = UIImageView()
+        let img = UIImageView()
         img.backgroundColor = .gray
-        img.contentMode = .scaleAspectFill
-        img.clipsToBounds = true
+//        img.contentMode = .scaleAspectFill
+//        img.clipsToBounds = true
         img.translatesAutoresizingMaskIntoConstraints = false
         return img
     }()
-
     
-    private let descriprionLabel: UILabel = {
+    
+    private let descriptionLabel: UILabel = {
         let lbl = UILabel()
         lbl.numberOfLines = 0
         lbl.translatesAutoresizingMaskIntoConstraints = false
         return lbl
     }()
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -75,7 +72,6 @@ class DetailViewController: UIViewController {
         title = "\(news.author ?? "author")"
         populate()
     }
-    
     private func setUpView() {
         defer {
             setUpConstrians()
@@ -85,8 +81,8 @@ class DetailViewController: UIViewController {
         stackView.setCustomSpacing(20, after: mainImageView)
         stackView.addArrangedSubview(titleLabel)
         stackView.setCustomSpacing(20, after: titleLabel)
-        stackView.addArrangedSubview(descriprionLabel)
-        stackView.setCustomSpacing(20, after: descriprionLabel)
+        stackView.addArrangedSubview(descriptionLabel)
+        stackView.setCustomSpacing(20, after: descriptionLabel)
         stackView.addArrangedSubview(authorLabel)
     }
     
@@ -95,24 +91,17 @@ class DetailViewController: UIViewController {
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             stackView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor),
-            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor)
+            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            
+            mainImageView.heightAnchor.constraint(equalToConstant: 230)
         ])
     }
     func populate() {
         titleLabel.text = news.title
         authorLabel.text = "Author: \(news.author ?? "unknown")"
-        descriprionLabel.text = news.description
+        descriptionLabel.text = news.description
         guard let urlString = news.image, let url = URL(string: urlString) else { return }
         mainImageView.kf.indicatorType = .activity
         mainImageView.kf.setImage(with: url)
     }
-    
-//    func didUpdateNews(_ newsManager: NewsManager, news: [NewsData]) {
-//        self.news = news
-//        view.reloadInputViews()
-//    }
-    
-//    func didFailWithError(error: Error) {
-//        print(error)
-//    }
 }
