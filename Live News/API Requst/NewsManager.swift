@@ -13,8 +13,8 @@ protocol NewsManagerDelegate: AnyObject {
 }
 
 class NewsManager {
-    let newsURL = String.liveNewsUrl
-    let sportUrl = String.sportsUrl
+    let newsURL = URLs.liveNewsUrl
+    let sportUrl = URLs.sportsURL
     
     weak var delegate: NewsManagerDelegate?
     
