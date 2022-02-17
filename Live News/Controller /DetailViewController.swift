@@ -100,7 +100,10 @@ class DetailViewController: UIViewController {
         titleLabel.text = news.title
         authorLabel.text = "Author: \(news.author ?? "unknown")"
         descriptionLabel.text = news.description
-        guard let urlString = news.image, let url = URL(string: urlString) else { return }
+        guard let urlString = news.image, let url = URL(string: urlString) else {
+            mainImageView.image = .placeholderImage
+            return
+        }
         mainImageView.kf.indicatorType = .activity
         mainImageView.kf.setImage(with: url)
     }

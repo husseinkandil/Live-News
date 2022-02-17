@@ -12,3 +12,7 @@ extension UIView {
         return String(describing: self)
     }
 }
+
+extension UIImage {
+    static var placeholderImage = UIImage(named: "placeholderImage")
+}

@@ -10,21 +10,8 @@ import Kingfisher
 
 class NewsCell: UITableViewCell {
     
-//    private let containerView: UIView = {
-//       let view = UIView()
-//        view.translatesAutoresizingMaskIntoConstraints = false
-//        view.layer.cornerRadius = 5
-//        view.layer.borderColor = UIColor.gray.cgColor
-//        view.layer.borderWidth = 2
-//        view.layer.shadowOffset = .init(width: 0, height: 3)
-//        view.layer.shadowColor = UIColor.gray.cgColor
-//        view.layer.shadowOpacity = 0.2
-//        view.layer.shadowRadius = 2
-//        return view
-//    }()
-    
     private let stackView : UIStackView = {
-       let stackView = UIStackView()
+        let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 20
         stackView.alignment = .fill
@@ -33,7 +20,7 @@ class NewsCell: UITableViewCell {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
-  
+    
     private let titleLabel: UILabel = {
         let title = UILabel()
         title.translatesAutoresizingMaskIntoConstraints = false
@@ -50,10 +37,11 @@ class NewsCell: UITableViewCell {
         return lbl
     }()
     
-    private let image: UIImageView = {
-       let img = UIImageView()
+    private lazy var mainImageView: UIImageView = {
+        var img = UIImageView()
         img.backgroundColor = .gray
         img.translatesAutoresizingMaskIntoConstraints = false
+        img.image = UIImage(named: "placeholderImage")
         return img
     }()
     
@@ -64,31 +52,25 @@ class NewsCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        image.image = nil
+        mainImageView.image = nil
     }
     
     func activateConstraints() {
-//        contentView.addSubview(containerView)
         contentView.addSubview(stackView)
-        stackView.addArrangedSubview(image)
-        stackView.setCustomSpacing(10, after: image)
+        stackView.addArrangedSubview(mainImageView)
+        stackView.setCustomSpacing(10, after: mainImageView)
         stackView.addArrangedSubview(titleLabel)
         stackView.setCustomSpacing(10, after: titleLabel)
         stackView.addArrangedSubview(authorLabel)
         
         
         NSLayoutConstraint.activate([
-//            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-//            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-//            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
-//            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -10),
-            
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             stackView.topAnchor.constraint(equalTo: contentView.topAnchor),
             
-            image.heightAnchor.constraint(equalToConstant: 230),
+            mainImageView.heightAnchor.constraint(equalToConstant: 230),
         ])
     }
     
@@ -99,9 +81,20 @@ class NewsCell: UITableViewCell {
     func populate(with news: NewsData) {
         titleLabel.text = news.title
         authorLabel.text = "Author: \(news.author ?? "unknown")"
-        guard let urlString = news.image, let url = URL(string: urlString) else { return }
-        image.kf.indicatorType = .activity
-        image.kf.setImage(with: url)
+        guard let urlString = news.image, let url = URL(string: urlString) else {
+            mainImageView.image = .placeholderImage
+            return
+        }
+        mainImageView.kf.setImage(with: url, placeholder: UIImage.placeholderImage, options: nil) { [weak self] result in
+            DispatchQueue.main.async {
+                switch result {
+                case .failure:
+                    self?.mainImageView.image = .placeholderImage
+                case .success(let image):
+                    self?.mainImageView.image = image.image
+                }
+            }
+        }
     }
 }
 
