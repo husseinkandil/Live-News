@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class LiveNewsViewController: UIViewController, NewsManagerDelegate, SearchViewAnimateble, UISearchBarDelegate {
     
@@ -17,7 +18,6 @@ class LiveNewsViewController: UIViewController, NewsManagerDelegate, SearchViewA
         let btn = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.search, target: self, action: #selector(searchButtonPressed))
         return btn
     }()
-    
     var isSearching = false
     var filteredNews: [NewsData] = []
     
@@ -123,7 +123,8 @@ extension LiveNewsViewController: UITableViewDelegate, UITableViewDataSource {
     func openSafari(with data: NewsData) {
         if let urlString = data.url, let url = URL(string: urlString),
            UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            let vc = SFSafariViewController(url: url)
+            present(vc, animated: true, completion: nil)
         }
     }
     // MARK: - managerDelegate

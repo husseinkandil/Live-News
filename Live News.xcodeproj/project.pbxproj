@@ -16,6 +16,7 @@
 		1E6FF4FA27BD8B430002DCA2 /* SportNewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6FF4F927BD8B430002DCA2 /* SportNewsViewController.swift */; };
 		1E6FF4FF27BE980B0002DCA2 /* SearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6FF4FE27BE980B0002DCA2 /* SearchBar.swift */; };
 		1E6FF50127BEE74C0002DCA2 /* UITextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6FF50027BEE74C0002DCA2 /* UITextView.swift */; };
+		1E6FF50327BFDC470002DCA2 /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E6FF50227BFDC470002DCA2 /* WebViewController.swift */; };
 		1EDD061727BA86F000A7CD9E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDD061627BA86F000A7CD9E /* AppDelegate.swift */; };
 		1EDD061927BA86F000A7CD9E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDD061827BA86F000A7CD9E /* SceneDelegate.swift */; };
 		1EDD061B27BA86F000A7CD9E /* LiveNewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1EDD061A27BA86F000A7CD9E /* LiveNewsViewController.swift */; };
@@ -38,6 +39,7 @@
 		1E6FF4F927BD8B430002DCA2 /* SportNewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SportNewsViewController.swift; sourceTree = "<group>"; };
 		1E6FF4FE27BE980B0002DCA2 /* SearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBar.swift; sourceTree = "<group>"; };
 		1E6FF50027BEE74C0002DCA2 /* UITextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextView.swift; sourceTree = "<group>"; };
+		1E6FF50227BFDC470002DCA2 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
 		1EDD061327BA86F000A7CD9E /* Live News.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Live News.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1EDD061627BA86F000A7CD9E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1EDD061827BA86F000A7CD9E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				1EDD061A27BA86F000A7CD9E /* LiveNewsViewController.swift */,
 				1E6FF4F027BB0E190002DCA2 /* DetailViewController.swift */,
 				1E6FF4F927BD8B430002DCA2 /* SportNewsViewController.swift */,
+				1E6FF50227BFDC470002DCA2 /* WebViewController.swift */,
 			);
 			path = "Controller ";
 			sourceTree = "<group>";
@@ -305,6 +308,7 @@
 				1EDD062B27BA8DB400A7CD9E /* NewsCell.swift in Sources */,
 				1EDD061927BA86F000A7CD9E /* SceneDelegate.swift in Sources */,
 				1E6FF4E827BA97300002DCA2 /* NewsData.swift in Sources */,
+				1E6FF50327BFDC470002DCA2 /* WebViewController.swift in Sources */,
 				1E6FF4F627BD870F0002DCA2 /* TabBar.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
