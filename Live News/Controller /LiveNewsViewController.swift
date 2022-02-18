@@ -101,7 +101,9 @@ extension LiveNewsViewController: UITableViewDelegate, UITableViewDataSource {
             newsData = news[indexPath.row]
         }
         cell.populate(with: newsData)
-        
+        cell.didTapWebsite = { [weak self] in
+            self?.openSafari(with: newsData)
+        }
         return cell
     }
     
@@ -116,6 +118,13 @@ extension LiveNewsViewController: UITableViewDelegate, UITableViewDataSource {
         let newViewController = DetailViewController(news: newsData)
         newViewController.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(newViewController, animated: true)
+    }
+    
+    func openSafari(with data: NewsData) {
+        if let urlString = data.url, let url = URL(string: urlString),
+           UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
     }
     // MARK: - managerDelegate
     func didUpdateNews(_ newsManager: NewsManager, news: [NewsData]) {

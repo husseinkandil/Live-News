@@ -50,11 +50,6 @@ class NewsManager {
         let decoder = JSONDecoder()
         do {
             let decodedData = try decoder.decode(NewsResponse.self, from: newsData)
-            //            let name = decodedData.author
-            //            let image = decodedData.image
-            //            let description = decodedData.description
-            //            let title = decodedData.title
-            //            return NewsModel(authorName: name, newsTitle: title, newsDescription: description, newsImage: image)
             return decodedData
         } catch {
             delegate?.didFailWithError(error: error)

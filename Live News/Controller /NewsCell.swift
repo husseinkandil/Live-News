@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-class NewsCell: UITableViewCell {
+class NewsCell: UITableViewCell, UITextViewDelegate {
     
     private let stackView : UIStackView = {
         let stackView = UIStackView()
@@ -45,6 +45,22 @@ class NewsCell: UITableViewCell {
         return img
     }()
     
+    private lazy var urlButton: UIButton = {
+        let btn = UIButton()
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        btn.setTitleColor(UIColor(red: 0.27, green: 0.51, blue: 0.71, alpha: 1.00), for: .normal)
+        btn.setTitle("Website", for: .normal)
+        btn.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        btn.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
+        return btn
+    }()
+    
+    @objc func buttonAction(with sender: UIButton) {
+        didTapWebsite?()
+    }
+    
+    var didTapWebsite: (() -> Void)?
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         activateConstraints()
@@ -62,6 +78,7 @@ class NewsCell: UITableViewCell {
         stackView.addArrangedSubview(titleLabel)
         stackView.setCustomSpacing(10, after: titleLabel)
         stackView.addArrangedSubview(authorLabel)
+        stackView.addSubview(urlButton)
         
         
         NSLayoutConstraint.activate([
@@ -71,6 +88,10 @@ class NewsCell: UITableViewCell {
             stackView.topAnchor.constraint(equalTo: contentView.topAnchor),
             
             mainImageView.heightAnchor.constraint(equalToConstant: 230),
+            
+            urlButton.bottomAnchor.constraint(equalTo: authorLabel.bottomAnchor),
+            urlButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -10),
+            urlButton.topAnchor.constraint(equalTo: authorLabel.topAnchor),
         ])
     }
     
@@ -79,6 +100,7 @@ class NewsCell: UITableViewCell {
     }
     
     func populate(with news: NewsData) {
+//        self.data = news
         titleLabel.text = news.title
         authorLabel.text = "Author: \(news.author ?? "unknown")"
         guard let urlString = news.image, let url = URL(string: urlString) else {
