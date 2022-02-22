@@ -27,6 +27,7 @@ class LiveNewsViewController: UIViewController, NewsManagerDelegate, SearchViewA
         tbl.rowHeight = UITableView.automaticDimension
         tbl.estimatedRowHeight = 600
         tbl.register(NewsCell.self, forCellReuseIdentifier: NewsCell.identifier)
+        tbl.separatorStyle = .none
         tbl.dataSource = self
         tbl.delegate = self
         return tbl

@@ -9,6 +9,19 @@ import UIKit
 import Kingfisher
 
 class NewsCell: UITableViewCell, UITextViewDelegate {
+
+    private let cellView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.shadowColor = .init(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.8)
+        view.shadowOffset = CGSize(width: 3.0, height: 2.0)
+        view.shadowOpacity = 3.0
+        view.shadowRadius = 1
+        view.layer.cornerRadius = 5.0
+        view.layer.masksToBounds = false
+        view.backgroundColor = .white
+        return view
+    }()
     
     private let stackView : UIStackView = {
         let stackView = UIStackView()
@@ -16,7 +29,7 @@ class NewsCell: UITableViewCell, UITextViewDelegate {
         stackView.spacing = 20
         stackView.alignment = .fill
         stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.directionalLayoutMargins = .init(top: 10, leading: 10, bottom: 10, trailing: 10)
+        stackView.directionalLayoutMargins = .init(top: 5, leading: 5, bottom: 5, trailing: 5)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -72,7 +85,8 @@ class NewsCell: UITableViewCell, UITextViewDelegate {
     }
     
     func activateConstraints() {
-        contentView.addSubview(stackView)
+        contentView.addSubview(cellView)
+        cellView.addSubview(stackView)
         stackView.addArrangedSubview(mainImageView)
         stackView.setCustomSpacing(10, after: mainImageView)
         stackView.addArrangedSubview(titleLabel)
@@ -82,14 +96,19 @@ class NewsCell: UITableViewCell, UITextViewDelegate {
         
         
         NSLayoutConstraint.activate([
-            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
-            stackView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            cellView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+            cellView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 5),
+            cellView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -5),
+            cellView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -5),
+
+            stackView.leadingAnchor.constraint(equalTo: cellView.leadingAnchor),
+            stackView.trailingAnchor.constraint(equalTo: cellView.trailingAnchor),
+            stackView.bottomAnchor.constraint(equalTo: cellView.bottomAnchor),
+            stackView.topAnchor.constraint(equalTo: cellView.topAnchor),
             
             mainImageView.heightAnchor.constraint(equalToConstant: 230),
-            
-            urlButton.bottomAnchor.constraint(equalTo: authorLabel.bottomAnchor),
+
+            urlButton.bottomAnchor.constraint(equalTo: stackView.bottomAnchor),
             urlButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor, constant: -10),
             urlButton.topAnchor.constraint(equalTo: authorLabel.topAnchor),
         ])
