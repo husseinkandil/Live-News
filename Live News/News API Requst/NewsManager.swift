@@ -3,7 +3,7 @@
 //  Live News
 //
 //  Created by jaber on 14/02/2022.
-//
+//23001ea48e4d43429cb9f1f551570e05
 
 import UIKit
 
@@ -37,7 +37,7 @@ class NewsManager {
                 if let safeData = data {
                     if let newsResponse = self.parseJSON(safeData) {
                         DispatchQueue.main.async {
-                            self.delegate?.didUpdateNews(self, news: newsResponse.data)
+                            self.delegate?.didUpdateNews(self, news: newsResponse.articles)
                         }
                     }
                 }

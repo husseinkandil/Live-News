@@ -69,9 +69,21 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         setUpView()
         view.backgroundColor = .systemBackground
-        title = "\(news.author ?? "author")"
+        title = "\(authorLabel.text ?? "Live News")"
         populate()
     }
+
+    private func containsOnlyLetters(_ news: NewsData) {
+        guard let author = news.author else { return }
+        for chr in author {
+            if (!(chr >= "a" && chr <= "z" ) && !(chr >= "A" && chr <= "z")) {
+                authorLabel.text = "Author: Unknown"
+            } else {
+                authorLabel.text = "Author: \(news.author!)"
+            }
+        }
+    }
+
     private func setUpView() {
         defer {
             setUpConstrians()
@@ -98,9 +110,9 @@ class DetailViewController: UIViewController {
     }
     func populate() {
         titleLabel.text = news.title
-        authorLabel.text = "Author: \(news.author ?? "unknown")"
+        containsOnlyLetters(news)
         descriptionLabel.text = news.description
-        guard let urlString = news.image, let url = URL(string: urlString) else {
+        guard let urlString = news.urlToImage, let url = URL(string: urlString) else {
             mainImageView.image = .placeholderImage
             return
         }
