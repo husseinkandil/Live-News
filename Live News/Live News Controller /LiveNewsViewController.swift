@@ -9,9 +9,9 @@ import UIKit
 import SafariServices
 
 class LiveNewsViewController: UIViewController, NewsManagerDelegate, SearchViewAnimateble, UISearchBarDelegate {
-    
+
     private let manager = NewsManager()
-    private var news = [NewsData]()
+    private var news = [News]()
     private let refreshControl = UIRefreshControl()
     private let searchBar = UISearchBar()
     private lazy var searchBarButtonItem: UIBarButtonItem = {
@@ -19,8 +19,8 @@ class LiveNewsViewController: UIViewController, NewsManagerDelegate, SearchViewA
         return btn
     }()
     var isSearching = false
-    var filteredNews: [NewsData] = []
-    
+    var filteredNews: [News] = []
+
     private lazy var tableView: UITableView = {
         let tbl = UITableView()
         tbl.translatesAutoresizingMaskIntoConstraints = false
@@ -32,7 +32,7 @@ class LiveNewsViewController: UIViewController, NewsManagerDelegate, SearchViewA
         tbl.delegate = self
         return tbl
     }()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Live News"
@@ -48,30 +48,30 @@ class LiveNewsViewController: UIViewController, NewsManagerDelegate, SearchViewA
         definesPresentationContext = true
         navigationItem.rightBarButtonItem = searchBarButtonItem
     }
-    
+
     @objc private func searchButtonPressed() {
         showSearchBar(searchBar: searchBar)
         searchBar.placeholder = "Search..."
     }
-    
-    fileprivate func refreshNews() {
+
+    private func refreshNews() {
         refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
     }
-    
+
     @objc func refresh(_ sender: AnyObject) {
         manager.fetchNews()
     }
-    
+
     // MARK: - setting up view
-    
+
     private func setUpView() {
         defer {
             setUpConstrians()
         }
         view.addSubview(tableView)
     }
-    
+
     private func setUpConstrians() {
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.topAnchor),
@@ -84,7 +84,7 @@ class LiveNewsViewController: UIViewController, NewsManagerDelegate, SearchViewA
 
 // MARK: - table view delegate and data source
 extension LiveNewsViewController: UITableViewDelegate, UITableViewDataSource {
-    
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isSearching {
             return filteredNews.count
@@ -92,10 +92,10 @@ extension LiveNewsViewController: UITableViewDelegate, UITableViewDataSource {
             return news.count
         }
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NewsCell.identifier, for: indexPath) as! NewsCell
-        let newsData: NewsData
+        let newsData: News
         if isSearching {
             newsData = filteredNews[indexPath.row]
         } else {
@@ -103,14 +103,14 @@ extension LiveNewsViewController: UITableViewDelegate, UITableViewDataSource {
         }
         cell.populate(with: newsData)
         cell.didTapWebsite = { [weak self] in
-            self?.openSafari(with: newsData)
+            self?.openSafari(with: newsData as! NewsData)
         }
         return cell
     }
-    
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let newsData: NewsData
+        let newsData: News
         if isSearching {
             newsData = filteredNews[indexPath.row]
         } else {
@@ -120,7 +120,7 @@ extension LiveNewsViewController: UITableViewDelegate, UITableViewDataSource {
         newViewController.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(newViewController, animated: true)
     }
-    
+
     func openSafari(with data: NewsData) {
         if let urlString = data.url, let url = URL(string: urlString),
            UIApplication.shared.canOpenURL(url) {
@@ -129,12 +129,12 @@ extension LiveNewsViewController: UITableViewDelegate, UITableViewDataSource {
         }
     }
     // MARK: - managerDelegate
-    func didUpdateNews(_ newsManager: NewsManager, news: [NewsData]) {
+    func didUpdateNews(_ newsManager: NewsManager, news: [News]) {
         self.news = news
         tableView.reloadData()
         refreshControl.endRefreshing()
     }
-    
+
     func didFailWithError(error: Error) {
         print(error)
     }
@@ -145,16 +145,16 @@ extension LiveNewsViewController: UITableViewDelegate, UITableViewDataSource {
         })
         tableView.reloadData()
     }
-    
+
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         isSearching = true
         tableView.reloadData()
     }
-    
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         updateSearchResults(for: searchText)
     }
-    
+
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         isSearching = false
         hideSearchBar(searchBarButtonItem: searchBarButtonItem, title: title!)

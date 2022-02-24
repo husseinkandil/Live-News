@@ -10,10 +10,11 @@ import UIKit
 class SportNewsViewController: UIViewController, NewsManagerDelegate, SearchViewAnimateble, UISearchBarDelegate {
     
     private let manager = NewsManager()
-    private var news = [NewsData]()
+    private var news = [News]()
+    private let refreshControl = UIRefreshControl()
     private let searchBar = UISearchBar()
     var isSearching = false
-    var filteredNews: [NewsData] = []
+    var filteredNews: [News] = []
     
     private lazy var searchBarButtonItem: UIBarButtonItem = {
         let btn = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.search, target: self, action: #selector(searchButtonPressed))
@@ -37,6 +38,8 @@ class SportNewsViewController: UIViewController, NewsManagerDelegate, SearchView
         setUpView()
         manager.delegate = self
         manager.fetchSportNews()
+        refreshNews()
+        tableView.refreshControl = refreshControl
         tableView.delegate = self
         tableView.dataSource = self
         searchBar.showsCancelButton = true
@@ -48,6 +51,15 @@ class SportNewsViewController: UIViewController, NewsManagerDelegate, SearchView
     @objc private func searchButtonPressed() {
         showSearchBar(searchBar: searchBar)
         searchBar.placeholder = "Search..."
+    }
+    
+    private func refreshNews() {
+        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh...")
+        refreshControl.addTarget(self, action: #selector(self.refresh(_:)), for: .valueChanged)
+    }
+    
+    @objc func refresh(_ sender: AnyObject) {
+        manager.fetchSportNews()
     }
     
     // MARK: - setting up view
@@ -82,7 +94,7 @@ extension SportNewsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NewsCell.identifier, for: indexPath) as! NewsCell
-        let newsData: NewsData
+        let newsData: News
         if isSearching {
             newsData = filteredNews[indexPath.row]
         } else {
@@ -94,7 +106,7 @@ extension SportNewsViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let newsData: NewsData
+        let newsData: News
         if isSearching {
             newsData = filteredNews[indexPath.row]
         } else {
@@ -105,9 +117,10 @@ extension SportNewsViewController: UITableViewDelegate, UITableViewDataSource {
         navigationController?.pushViewController(newViewController, animated: true)
     }
     // MARK: - managerDelegate
-    func didUpdateNews(_ newsManager: NewsManager, news: [NewsData]) {
+    func didUpdateNews(_ newsManager: NewsManager, news: [News]) {
         self.news = news
         self.tableView.reloadData()
+        refreshControl.endRefreshing()
     }
     
     func didFailWithError(error: Error) {

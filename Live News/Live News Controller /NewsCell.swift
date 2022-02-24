@@ -118,10 +118,10 @@ class NewsCell: UITableViewCell, UITextViewDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func populate(with news: NewsData) {
+    func populate(with news: News) {
         titleLabel.text = news.title
         containsOnlyLetters(news)
-        guard let urlString = news.urlToImage, let url = URL(string: urlString) else {
+        guard let urlString = news.imageURL, let url = URL(string: urlString) else {
             mainImageView.image = .placeholderImage
             return
         }
@@ -136,8 +136,12 @@ class NewsCell: UITableViewCell, UITextViewDelegate {
             }
         }
     }
+    
+    private func setupImage() {
+        
+    }
 
-    private func containsOnlyLetters(_ news: NewsData) {
+    private func containsOnlyLetters(_ news: News) {
         guard let auth = news.author else { return }
         for chr in auth {
            if (!(chr >= "a" && chr <= "z") && !(chr >= "A" && chr <= "Z") ) {

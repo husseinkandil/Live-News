@@ -8,7 +8,7 @@
 import UIKit
 
 protocol NewsManagerDelegate: AnyObject {
-    func didUpdateNews(_ newsManager: NewsManager, news: [NewsData])
+    func didUpdateNews(_ newsManager: NewsManager, news: [News])
     func didFailWithError(error: Error)
 }
 
@@ -21,11 +21,11 @@ class NewsManager {
     func fetchNews() {
         performRequest(with: newsURL)
     }
-    
+
     func fetchSportNews() {
         performRequest(with: sportUrl)
     }
-    
+
     func performRequest(with URLString: String) {
         if let url = URL(string: URLString) {
             let session = URLSession(configuration: .default)
@@ -39,17 +39,32 @@ class NewsManager {
                         DispatchQueue.main.async {
                             self.delegate?.didUpdateNews(self, news: newsResponse.articles)
                         }
+                    } else if let sportNewsResponse = self.sportParseJSON(safeData) {
+                        DispatchQueue.main.async {
+                            self.delegate?.didUpdateNews(self, news: sportNewsResponse.data)
+                        }
                     }
                 }
             }
             task.resume()
         }
     }
-    
+
     func parseJSON(_ newsData: Data) -> NewsResponse? {
         let decoder = JSONDecoder()
         do {
             let decodedData = try decoder.decode(NewsResponse.self, from: newsData)
+            return decodedData
+        } catch {
+            delegate?.didFailWithError(error: error)
+            return nil
+        }
+    }
+    
+    func sportParseJSON(_ newsData: Data) -> SportNewsResponse? {
+        let decoder = JSONDecoder()
+        do {
+            let decodedData = try decoder.decode(SportNewsResponse.self, from: newsData)
             return decodedData
         } catch {
             delegate?.didFailWithError(error: error)

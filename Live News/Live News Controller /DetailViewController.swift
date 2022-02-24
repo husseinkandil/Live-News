@@ -9,9 +9,9 @@ import UIKit
 
 class DetailViewController: UIViewController {
     
-    private let news: NewsData
+    private let news: News
     
-    init(news: NewsData) {
+    init(news: News) {
         self.news = news
         super.init(nibName: nil, bundle: nil)
     }
@@ -73,7 +73,7 @@ class DetailViewController: UIViewController {
         populate()
     }
 
-    private func containsOnlyLetters(_ news: NewsData) {
+    private func containsOnlyLetters(_ news: News) {
         guard let author = news.author else { return }
         for chr in author {
             if (!(chr >= "a" && chr <= "z" ) && !(chr >= "A" && chr <= "z")) {
@@ -112,7 +112,7 @@ class DetailViewController: UIViewController {
         titleLabel.text = news.title
         containsOnlyLetters(news)
         descriptionLabel.text = news.description
-        guard let urlString = news.urlToImage, let url = URL(string: urlString) else {
+        guard let urlString = news.imageURL, let url = URL(string: urlString) else {
             mainImageView.image = .placeholderImage
             return
         }
