@@ -163,3 +163,9 @@ extension LiveNewsViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
+extension LiveNewsViewController: ScrollsToTop {
+    func scrollToTop() {
+        tableView.scrollToRow(at: .init(row: 0, section: 0), at: .top, animated: true)
+    }
+}
+

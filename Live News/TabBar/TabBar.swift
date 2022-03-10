@@ -7,13 +7,18 @@
 
 import UIKit
 
-class TabBar: UITabBarController {
+protocol ScrollsToTop: UIViewController {
+    func scrollToTop()
+}
+
+class TabBar: UITabBarController, UITabBarControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         UITabBar.appearance().barTintColor = .systemBackground
         tabBar.tintColor = .label
+        self.delegate = self
         setupVCs()
     }
     
@@ -25,8 +30,24 @@ class TabBar: UITabBarController {
         navController.tabBarItem.image = image
         navController.navigationBar.prefersLargeTitles = true
         rootViewController.navigationItem.title = title
+        
         return navController
     }
+    
+    
+    
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        if let rootController = viewController as? UINavigationController,
+            let topController = rootController.topViewController,
+            let viewController = topController as? ScrollsToTop {
+            if rootController.viewControllers.count == 1 {
+                viewController.scrollToTop()
+            }
+        } else if let vc = viewController as? ScrollsToTop {
+            vc.scrollToTop()
+        }
+    }
+    
     
     func setupVCs() {
         viewControllers = [
